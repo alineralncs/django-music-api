@@ -14,7 +14,7 @@ class MusicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Music
-        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre')
+        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'image')
 
     
 class PlaylistSerializer(serializers.ModelSerializer):
@@ -26,6 +26,6 @@ class PlaylistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Playlist
-        fields = ('url','id', 'name', 'music')
+        fields = ('url','id', 'name', 'music', 'image')
         
 
