@@ -7,13 +7,14 @@ coreapi==2.3.3
 coreapi-cli==1.0.9
 coreschema==0.0.4
 Django==4.0.5
+django-cors-headers==4.0.0
 django-filter==21.1
 djangorestframework==3.13.1
 idna==3.3
 itypes==1.2.0
 Jinja2==3.1.2
 MarkupSafe==2.1.1
-Pillow
+Pillow==9.5.0
 pytz==2022.1
 PyYAML==6.0
 requests==2.27.1

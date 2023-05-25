@@ -14,18 +14,19 @@ class MusicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Music
-        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'image')
+        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'lyrics')
 
     
 class PlaylistSerializer(serializers.ModelSerializer):
-    music = serializers.SlugRelatedField(
-        queryset= Music.objects.all(),
-        slug_field='name',
-        many=True
-        )
+    music = MusicSerializer(many=True, required=False)
+    # serializers.SlugRelatedField(
+    #     queryset= Music.objects.all(),
+    #     slug_field='name',
+    #     many=True
+    #     )
 
     class Meta:
         model = Playlist
-        fields = ('url','id', 'name', 'music', 'image')
+        fields = ('url','id', 'name', 'imageURL', 'music')
         
 
