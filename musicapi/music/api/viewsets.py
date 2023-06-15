@@ -11,7 +11,7 @@ from rest_framework import status
 from music.models import Artist
 from music.models import Music
 from music.models import Playlist
-from music.models import criar_artistas
+from music.models import criar_artistas, apagar_artistas
 # serializers import 
 from music.api.serializers import ArtistSerializer
 from music.api.serializers import MusicSerializer
@@ -30,6 +30,7 @@ class ArtistViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'])
     def criar_artistas(self, request):
+        #apagar_artistas()
         criar_artistas()
         return Response({"message": "Artistas criados com sucesso."})
     def create(self, request, *args, **kwargs):
