@@ -1,4 +1,5 @@
 from django.db import models
+import pandas as pd
 
 class Artist(models.Model):
     name = models.CharField(max_length=100)
@@ -35,3 +36,16 @@ class Playlist(models.Model):
         
     def __str__(self):
         return self.name
+
+
+def  criar_artistas():
+    dataset = pd.read_csv('dataset/spotify_artists_info_complete.csv', delimiter='\t')
+    print('dataset', dataset)
+
+    for index, row in dataset.iterrows():
+            artist = Artist(
+                name=row['name'],
+                imageURL=row['image_url']
+            )
+
+            artist.save()
