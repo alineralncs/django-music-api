@@ -12,7 +12,7 @@ class Artist(models.Model):
         return self.name 
 
 class Music(models.Model):
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='musics')
     name = models.CharField(max_length=100)
     duration = models.TimeField()
     genre = models.CharField(max_length=100)

@@ -1,11 +1,6 @@
 from rest_framework import serializers
 from music.models import Artist, Music, Playlist
 
-class ArtistSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Artist
-        fields = ('url', 'id', 'name', 'imageURL')
-
 class MusicSerializer(serializers.ModelSerializer):
     artist = serializers.SlugRelatedField(
         queryset=Artist.objects.all(),
@@ -15,6 +10,15 @@ class MusicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Music
         fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'lyrics')
+
+
+class ArtistSerializer(serializers.ModelSerializer):
+    musics = MusicSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Artist
+        fields = ('url', 'id', 'name', 'imageURL', 'musics')
+
 
     
 class PlaylistSerializer(serializers.ModelSerializer):
