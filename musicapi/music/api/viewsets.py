@@ -1,15 +1,12 @@
 # restframework import
 from rest_framework import viewsets
 from rest_framework import filters
-<<<<<<< HEAD
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 
-=======
 from rest_framework.response import Response
 from rest_framework import status
->>>>>>> b19fe412fdc05771d87c9507e062387f88c29815
 # models import
 from music.models import Artist
 from music.models import Music
