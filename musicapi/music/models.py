@@ -17,8 +17,8 @@ class Artist(models.Model):
 class Music(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='musics')
     name = models.CharField(max_length=100)
-    duration = models.TimeField()
-    genre = models.CharField(max_length=100)
+    duration = models.TimeField(blank=True, null=True)
+    genre = models.CharField(max_length=100, blank=True, null=True)
     lyrics = models.TextField(null=True)
 
     class Meta:
@@ -63,3 +63,30 @@ def  criar_artistas():
                 genre=genres,
             )
             artist.save()
+
+def criar_musicas():
+        # qs_artistas = Artist.objects.filter().values('name')
+
+        dataset =  pd.read_csv("dataset/spotify_songs.csv")
+
+        for index, row in dataset.iterrows():
+            nome_artista = row['track_artist']
+
+            try: 
+                artista = Artist.objects.get(name=nome_artista)
+            except Artist.DoesNotExist:
+                continue
+            if Music.objects.filter(name=row['track_name'], artist=artista).exists():
+                continue  
+
+            musica = Music(
+                name=row["track_name"],
+                artist=artista,
+                genre=row['playlist_genre']
+            )
+            musica.save()
+
+
+def apagar_musicas():
+    Music.objects.all().delete()
+
