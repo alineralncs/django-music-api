@@ -4,12 +4,13 @@ from music.models import Artist, Music, Playlist
 class MusicSerializer(serializers.ModelSerializer):
     artist = serializers.SlugRelatedField(
         queryset=Artist.objects.all(),
-        slug_field='name'
+        slug_field='imageURL'
     )
+
 
     class Meta:
         model = Music
-        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'lyrics')
+        fields = ('url' ,'id', 'artist', 'name', 'duration', 'genre', 'lyrics', )
 
 
 class ArtistSerializer(serializers.ModelSerializer):

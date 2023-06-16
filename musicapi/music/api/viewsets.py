@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 
 from rest_framework.response import Response
@@ -26,6 +27,8 @@ class ArtistViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     #pagination_class = None
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 10
 
     
     @action(detail=False, methods=['post'])
