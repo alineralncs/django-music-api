@@ -31,6 +31,7 @@ route = routers.DefaultRouter()
 route.register(r'artist', viewsets.ArtistViewSet)
 route.register(r'music', viewsets.MusicViewSet)
 route.register(r'playlist', viewsets.PlaylistViewSet)
+route.register(r'recomendacao', viewsets.RecomendacaoViewSet,  basename='recomendacao')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
