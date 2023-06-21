@@ -56,3 +56,10 @@ def apagar_artistas():
 def apagar_musicas():
     Music.objects.all().delete()
 
+def apagar_musicas_duplicadas():
+    duplicatas = Music.objects.values('name').annotate(name_count=Count('name')).filter(name_count__gt=1)
+
+    for duplicata in duplicatas:
+        nome = duplicata['name']
+        musicas_duplicadas = Music.objects.filter(name=nome)
+        musicas_duplicadas.exclude(pk=musicas_duplicadas.first().pk).delete()

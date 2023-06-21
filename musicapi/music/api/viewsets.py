@@ -20,7 +20,7 @@ from music.models import Artist
 from music.models import Music
 from music.models import Playlist
 from music.models import Recomendation
-from music.models import apagar_artistas, apagar_musicas
+from music.models import apagar_artistas, apagar_musicas, apagar_musicas_duplicadas
 # serializers import 
 from music.api.serializers import ArtistSerializer
 from music.api.serializers import MusicSerializer
@@ -84,31 +84,32 @@ class RecomendationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def populate_data(self, request):
-        apagar_artistas()
-        apagar_musicas()
-        artists_created = set()
-        music_instances = []
-        for index, row in self.dataset.iterrows():
-            artist_name = row['artistas']
-            image = row['imagem_artista_url']
-            if artist_name not in artists_created:
-                try:
-                    artist = Artist.objects.get(name=artist_name)
-                except Artist.DoesNotExist:
-                    artist = Artist.objects.create(name=artist_name, imageURL=image)
-                    artists_created.add(artist_name)
-            else:
-                artist = Artist.objects.get(name=artist_name)
+        # apagar_artistas()
+        # apagar_musicas()
+        apagar_musicas_duplicadas()
+        # artists_created = set()
+        # music_instances = []
+        # for index, row in self.dataset.iterrows():
+        #     artist_name = row['artistas']
+        #     image = row['imagem_artista_url']
+        #     if artist_name not in artists_created:
+        #         try:
+        #             artist = Artist.objects.get(name=artist_name)
+        #         except Artist.DoesNotExist:
+        #             artist = Artist.objects.create(name=artist_name, imageURL=image)
+        #             artists_created.add(artist_name)
+        #     else:
+        #         artist = Artist.objects.get(name=artist_name)
 
-            music = Music(
-                artist=artist,
-                name=row['track_name'],
-                genre=row['playlist_genre'],
-                subgenre=row['playlist_subgenre']
-            )
-            music_instances.append(music)
+        #     music = Music(
+        #         artist=artist,
+        #         name=row['track_name'],
+        #         genre=row['playlist_genre'],
+        #         subgenre=row['playlist_subgenre']
+        #     )
+        #     music_instances.append(music)
 
-        Music.objects.bulk_create(music_instances)
+        # Music.objects.bulk_create(music_instances)
 
         return Response({"message": "Data populated successfully."})
 
@@ -125,6 +126,7 @@ class RecomendationViewSet(viewsets.ModelViewSet):
 
         genero = serializer.validated_data.get('genre')
         subgenero = serializer.validated_data.get('subgenre')
+        #nome_playlist = serializer.validated_data.get('name')
 
         print(self.dataset.isnull().any())
         X = self.dataset[['playlist_genre', 'playlist_subgenre', 'track_name', 'artistas']]
@@ -143,7 +145,7 @@ class RecomendationViewSet(viewsets.ModelViewSet):
         encoder = OneHotEncoder()
         X_encoded_no_track = encoder.fit_transform(X_encoded_no_track)
         print('x', X_encoded_no_track)
-        num_clusters = 5
+        num_clusters = 10
         kmeans = KMeans(n_clusters=num_clusters, random_state=42)
 
         kmeans.fit(X_encoded_no_track)
@@ -160,12 +162,12 @@ class RecomendationViewSet(viewsets.ModelViewSet):
         # Filtrar os exemplos no conjunto de dados original que pertencem ao cluster identificado
         cluster_samples = X[kmeans.labels_ == cluster_label[0]]
 
-        num_recommendations = 20
+        num_recommendations = 10
         recommendations = cluster_samples.sample(n=num_recommendations)[['track_name', 'playlist_genre', 'playlist_subgenre', 'artistas']]
         
 
         # Add the playlist to the recommendation instance
-        playlist = Playlist.objects.create(name="Your Playlist")
+        playlist = Playlist.objects.create(name="For you")
 
         for _, row in recommendations.iterrows():
             artist_name = row['artistas']
