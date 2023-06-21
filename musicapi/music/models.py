@@ -31,9 +31,6 @@ class Music(models.Model):
 class Playlist(models.Model):
     music = models.ManyToManyField(Music)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='images/', null=True)
-    imageURL = models.URLField(null=True, blank=True, max_length=100)
-
 
     class Meta:
         ordering = ['id']
@@ -41,13 +38,16 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
-class Recomendacao(models.Model): 
+class Recomendation(models.Model):
     genre = models.CharField(max_length=100)
     subgenre = models.CharField(max_length=100)
-    music = models.ForeignKey(Music, on_delete=models.CASCADE)
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['id']
+        
     def __str__(self):
-        return f'Recommended Music'
+        return f"Recomendation for {self.genre} - {self.subgenre}"
 
 def apagar_artistas():
     Artist.objects.all().delete()
